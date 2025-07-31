@@ -60,6 +60,11 @@ func (c *MiniRNG) Digest(serverSeed, clientSeed string) []byte {
 
 // DigestNonce generates a random byte array using the given server seed, client seed, nonce, and number.
 func (c *MiniRNG) DigestNonce(serverSeed, clientSeed string, nonce, num int) []byte {
-	str := fmt.Sprintf("%s:%d:%d", clientSeed, nonce, num)
-	return rngByte([]byte(serverSeed), []byte(str))
+	ret := make([]byte, 0)
+	for i := 0; i < num; i++ {
+		str := fmt.Sprintf("%s:%d:%d", clientSeed, nonce, i)
+		digest := rngByte([]byte(serverSeed), []byte(str))
+		ret = append(ret, digest...)
+	}
+	return ret
 }
