@@ -5,7 +5,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-
 	gonanoid "github.com/matoous/go-nanoid/v2"
 )
 
@@ -55,7 +54,12 @@ func (c *MiniRNG) SeedToHash(seed string) string {
 }
 
 // Digest generates a random byte array using the given server seed, client seed, nonce, and number.
-func (c *MiniRNG) Digest(serverSeed, clientSeed string, nonce, num int) []byte {
+func (c *MiniRNG) Digest(serverSeed, clientSeed string) []byte {
+	return rngByte([]byte(serverSeed), []byte(clientSeed))
+}
+
+// DigestNonce generates a random byte array using the given server seed, client seed, nonce, and number.
+func (c *MiniRNG) DigestNonce(serverSeed, clientSeed string, nonce, num int) []byte {
 	str := fmt.Sprintf("%s:%d:%d", clientSeed, nonce, num)
 	return rngByte([]byte(serverSeed), []byte(str))
 }
