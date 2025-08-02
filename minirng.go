@@ -41,16 +41,22 @@ func GenNanoID(size int) string {
 }
 
 type MiniRNG struct {
-	hash []byte
+	secretKey []byte
+	hashKey   []byte
 }
 
-func NewMiniRNG(hash []byte) *MiniRNG {
-	return &MiniRNG{hash: hash}
+func NewMiniRNG(secret []byte, hash []byte) *MiniRNG {
+	return &MiniRNG{secretKey: secret, hashKey: hash}
 }
 
 // SeedToHash generates a random string using the given seed and content.
 func (c *MiniRNG) SeedToHash(seed string) string {
-	return rngString([]byte(seed), c.hash)
+	return rngString([]byte(seed), c.secretKey)
+}
+
+// SeedToNext generates a random string using the given seed and content.
+func (c *MiniRNG) SeedToNext(seed string) string {
+	return rngString([]byte(seed), c.hashKey)
 }
 
 // Digest generates a random byte array using the given server seed, client seed, nonce, and number.
